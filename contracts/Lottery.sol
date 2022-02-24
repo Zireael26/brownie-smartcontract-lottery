@@ -13,6 +13,7 @@ contract Lottery is Ownable, VRFConsumerBase {
     uint256 public randomness;
     bytes32 internal keyHash;
     uint256 internal fee;
+    event RequestedRandomness(bytes32 requestId);
 
     enum LOTTERY_STATE {
         OPEN,
@@ -85,6 +86,7 @@ contract Lottery is Ownable, VRFConsumerBase {
         //
         lotteryState = LOTTERY_STATE.CALCULATING_WINNER;
         bytes32 requestId = getRandomNumber();
+        emit RequestedRandomness(requestId);
     }
 
     /**
