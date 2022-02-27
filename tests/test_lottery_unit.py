@@ -23,7 +23,7 @@ def test_get_entrance_fee():
     assert retrieved_price == Web3.toWei(0.025, "ether")
 
 
-def test_cannot_enter_unles_started():
+def test_cannot_enter_unless_started():
     if network.show_active() not in LOCAL_BLOCKCHAIN_ENVIRONMENTS:
         pytest.skip()
 
@@ -34,7 +34,7 @@ def test_cannot_enter_unles_started():
         lottery.enter({"from": get_account(), "value": lottery.getEntranceFee()})
 
 
-def can_start_and_enter_lottery():
+def test_can_start_and_enter_lottery():
     if network.show_active() not in LOCAL_BLOCKCHAIN_ENVIRONMENTS:
         pytest.skip()
     # Arrange
@@ -75,18 +75,17 @@ def test_can_pick_winner_correctly():
     lottery.enter({"from": get_account(index=1), "value": lottery.getEntranceFee()})
     lottery.enter({"from": get_account(index=2), "value": lottery.getEntranceFee()})
     fund_with_link(lottery)
-    transaction = lottery.endLottery(
-        {
-            "from": account,
-        }
-    )
+    transaction = lottery.endLottery({"from": account})
     STATIC_RNG = 777
     requestId = transaction.events["RequestedRandomness"]["requestId"]
     get_contract("vrf_coordinator").callBackWithRandomness(
         requestId, STATIC_RNG, lottery.address, {"from": account}
     )
+
+    # 777 % 3 = 0, so players[0] wins
     starting_balance_of_account = account.balance()
-    starting_balance = lottery.balance()
+    balance_of_lottery = lottery.balance()
+
     assert lottery.recentWinner() == account
     assert lottery.balance() == 0
-    assert account.balance() == starting_balance_of_account() + balance_of_lottery
+    assert account.balance() == starting_balance_of_account + balance_of_lottery

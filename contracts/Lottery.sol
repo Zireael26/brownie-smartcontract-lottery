@@ -33,7 +33,7 @@ contract Lottery is Ownable, VRFConsumerBase {
     )
         VRFConsumerBase(
             _vrfCoordinatorAddress, // VRF Coordinator
-            _vrfLinkToken // LINK Token
+            _vrfLinkToken // LINK Tokenol
         )
     {
         usdEntreeFee = 50 * (10**18);

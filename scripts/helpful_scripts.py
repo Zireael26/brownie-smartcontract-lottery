@@ -49,8 +49,7 @@ contract_to_mock = {
 
 def get_contract(contract_name):
     """This function will grab the contract addresses from the brownie config if defined,
-    otherwise it will deploy a mock version of that contract and deploy it, and return
-    that contract.
+    otherwise it will deploy a mock version of that contract, and return that contract.
 
         Args:
             contract_name(string)
@@ -76,7 +75,7 @@ def get_contract(contract_name):
 
 
 def fund_with_link(
-    contract_address, account=None, link_token=None, amount=100000000000000000
+    contract_address, account=None, link_token=None, amount=120000000000000000
 ):
     account = account if account else get_account()
     link_token = link_token if link_token else get_contract("link_token")
